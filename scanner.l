@@ -101,9 +101,9 @@ char* commentStringPtr;
 	\r   { *commentStringPtr++ = '\r'; }
 	\b   { *commentStringPtr++ = '\b'; }
 	\f   { *commentStringPtr++ = '\f'; }
-	\\([^"]|\n)   { *commentStringPtr++ = yytext[0]; *commentStringPtr++ = yytext[1]; }
 	
-	[^\\\n\"]+ { char* myChar = yytext;
+	
+	[^\n\"]+ { char* myChar = yytext;
 				 while( *myChar)
 				 	*commentStringPtr++ = *myChar++;
 				 
