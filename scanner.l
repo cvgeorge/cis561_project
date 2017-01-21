@@ -83,8 +83,8 @@ char* commentStringPtr;
 ["]["]["]		{ commentStringPtr = commentString; BEGIN(TRIPLEQUOTESTRINGS); }
 
 
-["](\\[0btnrf"\\]|[^"])*["]	{ cout << lineNumber << " STRING_LIT \"" << yytext << "\"" << endl; }
-["](\\[0btnrf"\\]|[^"])*[;]  { cerr << lineNumber << " Unclosed string encountered near \"" << yytext << "\"" << endl;}
+["](\\[0btnrf"\\]|[^"\n])*["]	{ cout << lineNumber << " STRING_LIT \"" << yytext << "\"" << endl; }
+\"[^\"\n]*$  { cout << lineNumber << " STRING_LIT \"" << yytext << "\"" << endl; cerr << lineNumber << " Unclosed string encountered near \"" << yytext << "\"" << endl;}
 
 
 
