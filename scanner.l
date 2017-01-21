@@ -133,5 +133,3 @@ int main(int argc, char** argv) {
 		yylex();
 	}
 }
-
-//["](\\.|[^\n"])*["]?	{ cout << lineNumber << " STRING_LIT \"" << yytext << "\"" << endl; }
