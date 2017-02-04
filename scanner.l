@@ -2,6 +2,8 @@
 #include <iostream>
 using namespace std;
 #define YY_DECL extern "C" int yylex()
+#include "parser.tab.h"
+
 # define MAX_STRING_LENGTH 4097
 int lineNumber = 1;
 char commentString[MAX_STRING_LENGTH];
@@ -19,50 +21,50 @@ char* commentStringPtr;
 \n 				{ lineNumber++; }
 " "				;
 
-"class"            { cout << lineNumber << " CLASS \"" << yytext << "\"" << endl;   }
-"def"              { cout << lineNumber << " DEF \"" << yytext << "\"" << endl;   }
-"extends"          { cout << lineNumber << " EXTENDS \"" << yytext << "\"" << endl;   }
-"if"               { cout << lineNumber << " IF \"" << yytext << "\"" << endl;   }
-"elif"             { cout << lineNumber << " ELIF \"" << yytext << "\"" << endl;   }
-"else"             { cout << lineNumber << " ELSE \"" << yytext << "\"" << endl;   }
-"while"            { cout << lineNumber << " WHILE \"" << yytext << "\"" << endl;   }
-"return"           { cout << lineNumber << " RETURN \"" << yytext << "\"" << endl;  }
+"class"            { return CLASS; }
+"def"              {  return DEF;  }
+"extends"          {  return EXTENDS;  }
+"if"               {  return IF;  }
+"elif"             {  return ELIF;  }
+"else"             {  return ELSE;  }
+"while"            {  return WHILE;  }
+"return"           {  return RETURN; }
 
 
 
-"+"                { cout << lineNumber << " + \"" << yytext << "\"" << endl;   }
-"-"                { cout << lineNumber << " - \"" << yytext << "\"" << endl;   }
-"*"                { cout << lineNumber << " * \"" << yytext << "\"" << endl;   }
-"/"                { cout << lineNumber << " / \"" << yytext << "\"" << endl;   }
+"+"                {  return PLUS;  }
+"-"                {  return MINUS;  }
+"*"                {  return MULT;  }
+"/"                {  return DIVIDE;  }
 
-"=="                { cout << lineNumber << " == \"" << yytext << "\"" << endl;   }
-"<="                { cout << lineNumber << " <= \"" << yytext << "\"" << endl;   }
-"<"                { cout << lineNumber << " < \"" << yytext << "\"" << endl;   }
-">="                { cout << lineNumber << " >= \"" << yytext << "\"" << endl;   }
-">"                { cout << lineNumber << " > \"" << yytext << "\"" << endl;   }
+"=="                {  return EQ;  }
+"<="                {  return LEQ;  }
+"<"                {  return LT;  }
+">="                {  return GEQ;  }
+">"                {  return GT;  }
 
-"and"                { cout << lineNumber << " AND \"" << yytext << "\"" << endl;   }
-"or"                { cout << lineNumber << " OR \"" << yytext << "\"" << endl;   }
-"not"                { cout << lineNumber << " NOT \"" << yytext << "\"" << endl;   }
+"and"                {  return AND;  }
+"or"                {  return OR;  }
+"not"                {  return NOT; }
 
-"{"                { cout << lineNumber << " { \"" << yytext << "\"" << endl;   }
-"}"                { cout << lineNumber << " } \"" << yytext << "\"" << endl;   }
-"="                { cout << lineNumber << " = \"" << yytext << "\"" << endl;   }
-"("                { cout << lineNumber << " ( \"" << yytext << "\"" << endl;   }
-")"                { cout << lineNumber << " ) \"" << yytext << "\"" << endl;   }
-","                { cout << lineNumber << " , \"" << yytext << "\"" << endl;   }
-";"                { cout << lineNumber << " ; \"" << yytext << "\"" << endl;   }
-"."                { cout << lineNumber << " . \"" << yytext << "\"" << endl;   }
-":"                { cout << lineNumber << " : \"" << yytext << "\"" << endl;   }
-
-
-
-[a-zA-Z_][a-zA-Z0-9_]*     { cout << lineNumber << " IDENT \"" << yytext << "\"" << endl;   }
+"{"                {  return yytext[0];  }
+"}"                {  return yytext[0];  }
+"="                {  return yytext[0];  }
+"("                {  return yytext[0];  }
+")"                {  return yytext[0];  }
+","                {  return yytext[0];  }
+";"                {  return yytext[0];  }
+"."                {  return DOT;  }
+":"                {  return yytext[0];   }
 
 
 
+[a-zA-Z_][a-zA-Z0-9_]*     { return IDENT;   }
 
-[0-9]+      { cout << lineNumber << " INT_LIT \"" << yytext << "\"" << endl;   }
+
+
+
+[0-9]+      {  return INT_LIT;   }
 
 
 
@@ -83,8 +85,8 @@ char* commentStringPtr;
 ["]["]["]		{ commentStringPtr = commentString; BEGIN(TRIPLEQUOTESTRINGS); }
 
 
-["](\\[0btnrf"\\]|[^"\n])*["]	{ cout << lineNumber << " STRING_LIT \"" << yytext << "\"" << endl; }
-\"[^\"\n]*$  { cout << lineNumber << " STRING_LIT \"" << yytext << "\"" << endl; cerr << lineNumber << " Unclosed string encountered near \"" << yytext << "\"" << endl;}
+["](\\[0btnrf"\\]|[^"\n])*["]	{  return STRING_LIT; }
+\"[^\"\n]*$  {  cerr << "Error tokenizing on line: " << lineNumber << " Unclosed string encountered near \"" << yytext << "\"" << endl;}
 
 
 
@@ -95,7 +97,7 @@ char* commentStringPtr;
 
 <TRIPLEQUOTESTRINGS>{
 
-	["]["]["]   { BEGIN(INITIAL);  cout << lineNumber << " STRING_LIT \"" << commentString << "\"" <<  endl;  }
+	["]["]["]   { BEGIN(INITIAL);  return STRING_LIT;  }
 	\n   { *commentStringPtr++ = '\n'; lineNumber++; }
 	\t   { *commentStringPtr++ = '\t'; }
 	\r   { *commentStringPtr++ = '\r'; }
@@ -113,7 +115,7 @@ char* commentStringPtr;
 
 
 %%
-
+/*
 int main(int argc, char** argv) {
 	
 	if(argc != 2)
@@ -133,3 +135,4 @@ int main(int argc, char** argv) {
 		yylex();
 	}
 }
+*/
