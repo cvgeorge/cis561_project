@@ -54,7 +54,7 @@ int condition = 0;
 %type <nodeval> start program class class_declarations class_signature formal_args class_body method statement_block statement r_expr l_expr elseif actual_args testFinal
 %%
 
-start: program {cout << "Successfully parsed the program!";};
+start: program {cout << "Finished parse with no errors";};
 
 program: class_declarations statements {;} ;
 		 /*class statement*/ 
@@ -173,14 +173,12 @@ int main(int argc, char** argv) {
 	// parse through the input until there is no more:
 	do {
 		condition = yyparse();
-		cout << " Condition: " << condition << endl;
 	} while (!feof(yyin));
 	
 }
 
 void yyerror(const char *s) {
-	cout << "Condition: " << condition << endl;
-	cout << "Parse error on line " << lineNumber << "!  Message: " << s << endl;
+	cout << lineNumber << ": " << s << endl;
 	// might as well halt now:
 	exit(-1);
 }
