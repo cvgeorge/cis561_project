@@ -1,0 +1,1548 @@
+Terminals unused in grammar
+
+   NOT
+
+
+State 73 conflicts: 12 shift/reduce
+State 74 conflicts: 12 shift/reduce
+
+
+Grammar
+
+    0 $accept: start $end
+
+    1 start: program
+
+    2 program: class_declarations statements
+
+    3 class_declarations: %empty
+    4                   | class class_declarations
+
+    5 statements: %empty
+    6           | statement statements
+
+    7 class: class_signature class_body
+
+    8 class_signature: CLASS IDENT '(' formal_args ')' EXTENDS IDENT
+    9                | CLASS IDENT '(' formal_args ')'
+
+   10 type: INTEGER
+   11     | STRING
+   12     | %empty
+
+   13 parameter: IDENT ':' type
+
+   14 formal_args: %empty
+   15            | parameter
+   16            | parameter ',' formal_args
+
+   17 class_body: '{' statements methods '}'
+
+   18 methods: %empty
+   19        | method methods
+
+   20 method: DEF IDENT '(' formal_args ')' ':' type statement_block
+   21       | DEF IDENT '(' formal_args ')' statement_block
+
+   22 statement_block: '{' statements '}'
+
+   23 else_clause: ELSE statement_block
+
+   24 elseif_header: ELIF r_expr
+
+   25 elseif_block: elseif_header statement_block
+   26             | elseif_header statement_block else_clause
+   27             | elseif_header statement_block elseif_block
+
+   28 if_statement: if_header statement_block
+   29             | if_header statement_block else_clause
+   30             | if_header statement_block elseif_block
+
+   31 if_header: IF r_expr
+
+   32 statement: if_statement
+   33          | WHILE '(' r_expr ')' statement_block
+   34          | RETURN r_expr ';'
+   35          | l_expr '=' r_expr ';'
+   36          | l_expr ':' IDENT '=' r_expr ';'
+   37          | r_expr ';'
+
+   38 l_expr: IDENT
+   39       | r_expr DOT IDENT
+
+   40 boolean_operator: OR
+   41                 | AND
+   42                 | EQ
+   43                 | GEQ
+   44                 | LEQ
+   45                 | GT
+   46                 | LT
+
+   47 arithmetic_operator: PLUS
+   48                    | MINUS
+   49                    | MULT
+   50                    | DIVIDE
+
+   51 r_expr: r_expr boolean_operator r_expr
+   52       | r_expr arithmetic_operator r_expr
+   53       | testFinal
+
+   54 testFinal: %empty
+   55          | IDENT
+   56          | r_expr dotMatcher
+   57          | IDENT '(' actual_args ')'
+   58          | STRING_LIT
+   59          | INT_LIT
+   60          | '(' r_expr ')'
+
+   61 dotMatcher: DOT IDENT '(' actual_args ')'
+   62           | DOT IDENT
+
+   63 actual_args: r_expr ',' actual_args
+   64            | r_expr
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 8 9 20 21 33 57 60 61
+')' (41) 8 9 20 21 33 57 60 61
+',' (44) 16 63
+':' (58) 13 20 36
+';' (59) 34 35 36 37
+'=' (61) 35 36
+'{' (123) 17 22
+'}' (125) 17 22
+error (256)
+CLASS (258) 8 9
+DEF (259) 20 21
+EXTENDS (260) 8
+IF (261) 31
+ELIF (262) 24
+ELSE (263) 23
+WHILE (264) 33
+RETURN (265) 34
+DOT (266) 39 61 62
+INT_LIT (267) 59
+INTEGER (268) 10
+STRING_LIT (269) 58
+IDENT (270) 8 9 13 20 21 36 38 39 55 57 61 62
+STRING (271) 11
+EQ (272) 42
+GEQ (273) 43
+LEQ (274) 44
+GT (275) 45
+LT (276) 46
+AND (277) 41
+OR (278) 40
+NOT (279)
+PLUS (280) 47
+MINUS (281) 48
+MULT (282) 49
+DIVIDE (283) 50
+
+
+Nonterminals, with rules where they appear
+
+$accept (37)
+    on left: 0
+start (38)
+    on left: 1, on right: 0
+program (39)
+    on left: 2, on right: 1
+class_declarations (40)
+    on left: 3 4, on right: 2 4
+statements (41)
+    on left: 5 6, on right: 2 6 17 22
+class (42)
+    on left: 7, on right: 4
+class_signature (43)
+    on left: 8 9, on right: 7
+type (44)
+    on left: 10 11 12, on right: 13 20
+parameter (45)
+    on left: 13, on right: 15 16
+formal_args (46)
+    on left: 14 15 16, on right: 8 9 16 20 21
+class_body (47)
+    on left: 17, on right: 7
+methods (48)
+    on left: 18 19, on right: 17 19
+method (49)
+    on left: 20 21, on right: 19
+statement_block (50)
+    on left: 22, on right: 20 21 23 25 26 27 28 29 30 33
+else_clause (51)
+    on left: 23, on right: 26 29
+elseif_header (52)
+    on left: 24, on right: 25 26 27
+elseif_block (53)
+    on left: 25 26 27, on right: 27 30
+if_statement (54)
+    on left: 28 29 30, on right: 32
+if_header (55)
+    on left: 31, on right: 28 29 30
+statement (56)
+    on left: 32 33 34 35 36 37, on right: 6
+l_expr (57)
+    on left: 38 39, on right: 35 36
+boolean_operator (58)
+    on left: 40 41 42 43 44 45 46, on right: 51
+arithmetic_operator (59)
+    on left: 47 48 49 50, on right: 52
+r_expr (60)
+    on left: 51 52 53, on right: 24 31 33 34 35 36 37 39 51 52 56 60
+    63 64
+testFinal (61)
+    on left: 54 55 56 57 58 59 60, on right: 53
+dotMatcher (62)
+    on left: 61 62, on right: 56
+actual_args (63)
+    on left: 63 64, on right: 57 61 63
+
+
+State 0
+
+    0 $accept: . start $end
+
+    CLASS  shift, and go to state 1
+
+    $default  reduce using rule 3 (class_declarations)
+
+    start               go to state 2
+    program             go to state 3
+    class_declarations  go to state 4
+    class               go to state 5
+    class_signature     go to state 6
+
+
+State 1
+
+    8 class_signature: CLASS . IDENT '(' formal_args ')' EXTENDS IDENT
+    9                | CLASS . IDENT '(' formal_args ')'
+
+    IDENT  shift, and go to state 7
+
+
+State 2
+
+    0 $accept: start . $end
+
+    $end  shift, and go to state 8
+
+
+State 3
+
+    1 start: program .
+
+    $default  reduce using rule 1 (start)
+
+
+State 4
+
+    2 program: class_declarations . statements
+
+    IF          shift, and go to state 9
+    WHILE       shift, and go to state 10
+    RETURN      shift, and go to state 11
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 14
+    '('         shift, and go to state 15
+
+    $end      reduce using rule 5 (statements)
+    $default  reduce using rule 54 (testFinal)
+
+    statements    go to state 16
+    if_statement  go to state 17
+    if_header     go to state 18
+    statement     go to state 19
+    l_expr        go to state 20
+    r_expr        go to state 21
+    testFinal     go to state 22
+
+
+State 5
+
+    4 class_declarations: class . class_declarations
+
+    CLASS  shift, and go to state 1
+
+    $default  reduce using rule 3 (class_declarations)
+
+    class_declarations  go to state 23
+    class               go to state 5
+    class_signature     go to state 6
+
+
+State 6
+
+    7 class: class_signature . class_body
+
+    '{'  shift, and go to state 24
+
+    class_body  go to state 25
+
+
+State 7
+
+    8 class_signature: CLASS IDENT . '(' formal_args ')' EXTENDS IDENT
+    9                | CLASS IDENT . '(' formal_args ')'
+
+    '('  shift, and go to state 26
+
+
+State 8
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+State 9
+
+   31 if_header: IF . r_expr
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr     go to state 28
+    testFinal  go to state 22
+
+
+State 10
+
+   33 statement: WHILE . '(' r_expr ')' statement_block
+
+    '('  shift, and go to state 29
+
+
+State 11
+
+   34 statement: RETURN . r_expr ';'
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr     go to state 30
+    testFinal  go to state 22
+
+
+State 12
+
+   59 testFinal: INT_LIT .
+
+    $default  reduce using rule 59 (testFinal)
+
+
+State 13
+
+   58 testFinal: STRING_LIT .
+
+    $default  reduce using rule 58 (testFinal)
+
+
+State 14
+
+   38 l_expr: IDENT .
+   55 testFinal: IDENT .
+   57          | IDENT . '(' actual_args ')'
+
+    '('  shift, and go to state 31
+
+    ':'       reduce using rule 38 (l_expr)
+    '='       reduce using rule 38 (l_expr)
+    $default  reduce using rule 55 (testFinal)
+
+
+State 15
+
+   60 testFinal: '(' . r_expr ')'
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr     go to state 32
+    testFinal  go to state 22
+
+
+State 16
+
+    2 program: class_declarations statements .
+
+    $default  reduce using rule 2 (program)
+
+
+State 17
+
+   32 statement: if_statement .
+
+    $default  reduce using rule 32 (statement)
+
+
+State 18
+
+   28 if_statement: if_header . statement_block
+   29             | if_header . statement_block else_clause
+   30             | if_header . statement_block elseif_block
+
+    '{'  shift, and go to state 33
+
+    statement_block  go to state 34
+
+
+State 19
+
+    6 statements: statement . statements
+
+    IF          shift, and go to state 9
+    WHILE       shift, and go to state 10
+    RETURN      shift, and go to state 11
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 14
+    '('         shift, and go to state 15
+
+    $end      reduce using rule 5 (statements)
+    DEF       reduce using rule 5 (statements)
+    '}'       reduce using rule 5 (statements)
+    $default  reduce using rule 54 (testFinal)
+
+    statements    go to state 35
+    if_statement  go to state 17
+    if_header     go to state 18
+    statement     go to state 19
+    l_expr        go to state 20
+    r_expr        go to state 21
+    testFinal     go to state 22
+
+
+State 20
+
+   35 statement: l_expr . '=' r_expr ';'
+   36          | l_expr . ':' IDENT '=' r_expr ';'
+
+    ':'  shift, and go to state 36
+    '='  shift, and go to state 37
+
+
+State 21
+
+   37 statement: r_expr . ';'
+   39 l_expr: r_expr . DOT IDENT
+   51 r_expr: r_expr . boolean_operator r_expr
+   52       | r_expr . arithmetic_operator r_expr
+   56 testFinal: r_expr . dotMatcher
+
+    DOT     shift, and go to state 38
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+    ';'     shift, and go to state 50
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 22
+
+   53 r_expr: testFinal .
+
+    $default  reduce using rule 53 (r_expr)
+
+
+State 23
+
+    4 class_declarations: class class_declarations .
+
+    $default  reduce using rule 4 (class_declarations)
+
+
+State 24
+
+   17 class_body: '{' . statements methods '}'
+
+    IF          shift, and go to state 9
+    WHILE       shift, and go to state 10
+    RETURN      shift, and go to state 11
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 14
+    '('         shift, and go to state 15
+
+    DEF       reduce using rule 5 (statements)
+    '}'       reduce using rule 5 (statements)
+    $default  reduce using rule 54 (testFinal)
+
+    statements    go to state 54
+    if_statement  go to state 17
+    if_header     go to state 18
+    statement     go to state 19
+    l_expr        go to state 20
+    r_expr        go to state 21
+    testFinal     go to state 22
+
+
+State 25
+
+    7 class: class_signature class_body .
+
+    $default  reduce using rule 7 (class)
+
+
+State 26
+
+    8 class_signature: CLASS IDENT '(' . formal_args ')' EXTENDS IDENT
+    9                | CLASS IDENT '(' . formal_args ')'
+
+    IDENT  shift, and go to state 55
+
+    $default  reduce using rule 14 (formal_args)
+
+    parameter    go to state 56
+    formal_args  go to state 57
+
+
+State 27
+
+   55 testFinal: IDENT .
+   57          | IDENT . '(' actual_args ')'
+
+    '('  shift, and go to state 31
+
+    $default  reduce using rule 55 (testFinal)
+
+
+State 28
+
+   31 if_header: IF r_expr .
+   51 r_expr: r_expr . boolean_operator r_expr
+   52       | r_expr . arithmetic_operator r_expr
+   56 testFinal: r_expr . dotMatcher
+
+    DOT     shift, and go to state 58
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+
+    $default  reduce using rule 31 (if_header)
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 29
+
+   33 statement: WHILE '(' . r_expr ')' statement_block
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr     go to state 59
+    testFinal  go to state 22
+
+
+State 30
+
+   34 statement: RETURN r_expr . ';'
+   51 r_expr: r_expr . boolean_operator r_expr
+   52       | r_expr . arithmetic_operator r_expr
+   56 testFinal: r_expr . dotMatcher
+
+    DOT     shift, and go to state 58
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+    ';'     shift, and go to state 60
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 31
+
+   57 testFinal: IDENT '(' . actual_args ')'
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr       go to state 61
+    testFinal    go to state 22
+    actual_args  go to state 62
+
+
+State 32
+
+   51 r_expr: r_expr . boolean_operator r_expr
+   52       | r_expr . arithmetic_operator r_expr
+   56 testFinal: r_expr . dotMatcher
+   60          | '(' r_expr . ')'
+
+    DOT     shift, and go to state 58
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+    ')'     shift, and go to state 63
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 33
+
+   22 statement_block: '{' . statements '}'
+
+    IF          shift, and go to state 9
+    WHILE       shift, and go to state 10
+    RETURN      shift, and go to state 11
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 14
+    '('         shift, and go to state 15
+
+    '}'       reduce using rule 5 (statements)
+    $default  reduce using rule 54 (testFinal)
+
+    statements    go to state 64
+    if_statement  go to state 17
+    if_header     go to state 18
+    statement     go to state 19
+    l_expr        go to state 20
+    r_expr        go to state 21
+    testFinal     go to state 22
+
+
+State 34
+
+   28 if_statement: if_header statement_block .
+   29             | if_header statement_block . else_clause
+   30             | if_header statement_block . elseif_block
+
+    ELIF  shift, and go to state 65
+    ELSE  shift, and go to state 66
+
+    $default  reduce using rule 28 (if_statement)
+
+    else_clause    go to state 67
+    elseif_header  go to state 68
+    elseif_block   go to state 69
+
+
+State 35
+
+    6 statements: statement statements .
+
+    $default  reduce using rule 6 (statements)
+
+
+State 36
+
+   36 statement: l_expr ':' . IDENT '=' r_expr ';'
+
+    IDENT  shift, and go to state 70
+
+
+State 37
+
+   35 statement: l_expr '=' . r_expr ';'
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr     go to state 71
+    testFinal  go to state 22
+
+
+State 38
+
+   39 l_expr: r_expr DOT . IDENT
+   61 dotMatcher: DOT . IDENT '(' actual_args ')'
+   62           | DOT . IDENT
+
+    IDENT  shift, and go to state 72
+
+
+State 39
+
+   42 boolean_operator: EQ .
+
+    $default  reduce using rule 42 (boolean_operator)
+
+
+State 40
+
+   43 boolean_operator: GEQ .
+
+    $default  reduce using rule 43 (boolean_operator)
+
+
+State 41
+
+   44 boolean_operator: LEQ .
+
+    $default  reduce using rule 44 (boolean_operator)
+
+
+State 42
+
+   45 boolean_operator: GT .
+
+    $default  reduce using rule 45 (boolean_operator)
+
+
+State 43
+
+   46 boolean_operator: LT .
+
+    $default  reduce using rule 46 (boolean_operator)
+
+
+State 44
+
+   41 boolean_operator: AND .
+
+    $default  reduce using rule 41 (boolean_operator)
+
+
+State 45
+
+   40 boolean_operator: OR .
+
+    $default  reduce using rule 40 (boolean_operator)
+
+
+State 46
+
+   47 arithmetic_operator: PLUS .
+
+    $default  reduce using rule 47 (arithmetic_operator)
+
+
+State 47
+
+   48 arithmetic_operator: MINUS .
+
+    $default  reduce using rule 48 (arithmetic_operator)
+
+
+State 48
+
+   49 arithmetic_operator: MULT .
+
+    $default  reduce using rule 49 (arithmetic_operator)
+
+
+State 49
+
+   50 arithmetic_operator: DIVIDE .
+
+    $default  reduce using rule 50 (arithmetic_operator)
+
+
+State 50
+
+   37 statement: r_expr ';' .
+
+    $default  reduce using rule 37 (statement)
+
+
+State 51
+
+   51 r_expr: r_expr boolean_operator . r_expr
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr     go to state 73
+    testFinal  go to state 22
+
+
+State 52
+
+   52 r_expr: r_expr arithmetic_operator . r_expr
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr     go to state 74
+    testFinal  go to state 22
+
+
+State 53
+
+   56 testFinal: r_expr dotMatcher .
+
+    $default  reduce using rule 56 (testFinal)
+
+
+State 54
+
+   17 class_body: '{' statements . methods '}'
+
+    DEF  shift, and go to state 75
+
+    $default  reduce using rule 18 (methods)
+
+    methods  go to state 76
+    method   go to state 77
+
+
+State 55
+
+   13 parameter: IDENT . ':' type
+
+    ':'  shift, and go to state 78
+
+
+State 56
+
+   15 formal_args: parameter .
+   16            | parameter . ',' formal_args
+
+    ','  shift, and go to state 79
+
+    $default  reduce using rule 15 (formal_args)
+
+
+State 57
+
+    8 class_signature: CLASS IDENT '(' formal_args . ')' EXTENDS IDENT
+    9                | CLASS IDENT '(' formal_args . ')'
+
+    ')'  shift, and go to state 80
+
+
+State 58
+
+   61 dotMatcher: DOT . IDENT '(' actual_args ')'
+   62           | DOT . IDENT
+
+    IDENT  shift, and go to state 81
+
+
+State 59
+
+   33 statement: WHILE '(' r_expr . ')' statement_block
+   51 r_expr: r_expr . boolean_operator r_expr
+   52       | r_expr . arithmetic_operator r_expr
+   56 testFinal: r_expr . dotMatcher
+
+    DOT     shift, and go to state 58
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+    ')'     shift, and go to state 82
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 60
+
+   34 statement: RETURN r_expr ';' .
+
+    $default  reduce using rule 34 (statement)
+
+
+State 61
+
+   51 r_expr: r_expr . boolean_operator r_expr
+   52       | r_expr . arithmetic_operator r_expr
+   56 testFinal: r_expr . dotMatcher
+   63 actual_args: r_expr . ',' actual_args
+   64            | r_expr .
+
+    DOT     shift, and go to state 58
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+    ','     shift, and go to state 83
+
+    $default  reduce using rule 64 (actual_args)
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 62
+
+   57 testFinal: IDENT '(' actual_args . ')'
+
+    ')'  shift, and go to state 84
+
+
+State 63
+
+   60 testFinal: '(' r_expr ')' .
+
+    $default  reduce using rule 60 (testFinal)
+
+
+State 64
+
+   22 statement_block: '{' statements . '}'
+
+    '}'  shift, and go to state 85
+
+
+State 65
+
+   24 elseif_header: ELIF . r_expr
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr     go to state 86
+    testFinal  go to state 22
+
+
+State 66
+
+   23 else_clause: ELSE . statement_block
+
+    '{'  shift, and go to state 33
+
+    statement_block  go to state 87
+
+
+State 67
+
+   29 if_statement: if_header statement_block else_clause .
+
+    $default  reduce using rule 29 (if_statement)
+
+
+State 68
+
+   25 elseif_block: elseif_header . statement_block
+   26             | elseif_header . statement_block else_clause
+   27             | elseif_header . statement_block elseif_block
+
+    '{'  shift, and go to state 33
+
+    statement_block  go to state 88
+
+
+State 69
+
+   30 if_statement: if_header statement_block elseif_block .
+
+    $default  reduce using rule 30 (if_statement)
+
+
+State 70
+
+   36 statement: l_expr ':' IDENT . '=' r_expr ';'
+
+    '='  shift, and go to state 89
+
+
+State 71
+
+   35 statement: l_expr '=' r_expr . ';'
+   51 r_expr: r_expr . boolean_operator r_expr
+   52       | r_expr . arithmetic_operator r_expr
+   56 testFinal: r_expr . dotMatcher
+
+    DOT     shift, and go to state 58
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+    ';'     shift, and go to state 90
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 72
+
+   39 l_expr: r_expr DOT IDENT .
+   61 dotMatcher: DOT IDENT . '(' actual_args ')'
+   62           | DOT IDENT .
+
+    '('  shift, and go to state 91
+
+    ':'       reduce using rule 39 (l_expr)
+    '='       reduce using rule 39 (l_expr)
+    $default  reduce using rule 62 (dotMatcher)
+
+
+State 73
+
+   51 r_expr: r_expr . boolean_operator r_expr
+   51       | r_expr boolean_operator r_expr .
+   52       | r_expr . arithmetic_operator r_expr
+   56 testFinal: r_expr . dotMatcher
+
+    DOT     shift, and go to state 58
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+
+    DOT       [reduce using rule 51 (r_expr)]
+    EQ        [reduce using rule 51 (r_expr)]
+    GEQ       [reduce using rule 51 (r_expr)]
+    LEQ       [reduce using rule 51 (r_expr)]
+    GT        [reduce using rule 51 (r_expr)]
+    LT        [reduce using rule 51 (r_expr)]
+    AND       [reduce using rule 51 (r_expr)]
+    OR        [reduce using rule 51 (r_expr)]
+    PLUS      [reduce using rule 51 (r_expr)]
+    MINUS     [reduce using rule 51 (r_expr)]
+    MULT      [reduce using rule 51 (r_expr)]
+    DIVIDE    [reduce using rule 51 (r_expr)]
+    $default  reduce using rule 51 (r_expr)
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 74
+
+   51 r_expr: r_expr . boolean_operator r_expr
+   52       | r_expr . arithmetic_operator r_expr
+   52       | r_expr arithmetic_operator r_expr .
+   56 testFinal: r_expr . dotMatcher
+
+    DOT     shift, and go to state 58
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+
+    DOT       [reduce using rule 52 (r_expr)]
+    EQ        [reduce using rule 52 (r_expr)]
+    GEQ       [reduce using rule 52 (r_expr)]
+    LEQ       [reduce using rule 52 (r_expr)]
+    GT        [reduce using rule 52 (r_expr)]
+    LT        [reduce using rule 52 (r_expr)]
+    AND       [reduce using rule 52 (r_expr)]
+    OR        [reduce using rule 52 (r_expr)]
+    PLUS      [reduce using rule 52 (r_expr)]
+    MINUS     [reduce using rule 52 (r_expr)]
+    MULT      [reduce using rule 52 (r_expr)]
+    DIVIDE    [reduce using rule 52 (r_expr)]
+    $default  reduce using rule 52 (r_expr)
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 75
+
+   20 method: DEF . IDENT '(' formal_args ')' ':' type statement_block
+   21       | DEF . IDENT '(' formal_args ')' statement_block
+
+    IDENT  shift, and go to state 92
+
+
+State 76
+
+   17 class_body: '{' statements methods . '}'
+
+    '}'  shift, and go to state 93
+
+
+State 77
+
+   19 methods: method . methods
+
+    DEF  shift, and go to state 75
+
+    $default  reduce using rule 18 (methods)
+
+    methods  go to state 94
+    method   go to state 77
+
+
+State 78
+
+   13 parameter: IDENT ':' . type
+
+    INTEGER  shift, and go to state 95
+    STRING   shift, and go to state 96
+
+    $default  reduce using rule 12 (type)
+
+    type  go to state 97
+
+
+State 79
+
+   16 formal_args: parameter ',' . formal_args
+
+    IDENT  shift, and go to state 55
+
+    $default  reduce using rule 14 (formal_args)
+
+    parameter    go to state 56
+    formal_args  go to state 98
+
+
+State 80
+
+    8 class_signature: CLASS IDENT '(' formal_args ')' . EXTENDS IDENT
+    9                | CLASS IDENT '(' formal_args ')' .
+
+    EXTENDS  shift, and go to state 99
+
+    $default  reduce using rule 9 (class_signature)
+
+
+State 81
+
+   61 dotMatcher: DOT IDENT . '(' actual_args ')'
+   62           | DOT IDENT .
+
+    '('  shift, and go to state 91
+
+    $default  reduce using rule 62 (dotMatcher)
+
+
+State 82
+
+   33 statement: WHILE '(' r_expr ')' . statement_block
+
+    '{'  shift, and go to state 33
+
+    statement_block  go to state 100
+
+
+State 83
+
+   63 actual_args: r_expr ',' . actual_args
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr       go to state 61
+    testFinal    go to state 22
+    actual_args  go to state 101
+
+
+State 84
+
+   57 testFinal: IDENT '(' actual_args ')' .
+
+    $default  reduce using rule 57 (testFinal)
+
+
+State 85
+
+   22 statement_block: '{' statements '}' .
+
+    $default  reduce using rule 22 (statement_block)
+
+
+State 86
+
+   24 elseif_header: ELIF r_expr .
+   51 r_expr: r_expr . boolean_operator r_expr
+   52       | r_expr . arithmetic_operator r_expr
+   56 testFinal: r_expr . dotMatcher
+
+    DOT     shift, and go to state 58
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+
+    $default  reduce using rule 24 (elseif_header)
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 87
+
+   23 else_clause: ELSE statement_block .
+
+    $default  reduce using rule 23 (else_clause)
+
+
+State 88
+
+   25 elseif_block: elseif_header statement_block .
+   26             | elseif_header statement_block . else_clause
+   27             | elseif_header statement_block . elseif_block
+
+    ELIF  shift, and go to state 65
+    ELSE  shift, and go to state 66
+
+    $default  reduce using rule 25 (elseif_block)
+
+    else_clause    go to state 102
+    elseif_header  go to state 68
+    elseif_block   go to state 103
+
+
+State 89
+
+   36 statement: l_expr ':' IDENT '=' . r_expr ';'
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr     go to state 104
+    testFinal  go to state 22
+
+
+State 90
+
+   35 statement: l_expr '=' r_expr ';' .
+
+    $default  reduce using rule 35 (statement)
+
+
+State 91
+
+   61 dotMatcher: DOT IDENT '(' . actual_args ')'
+
+    INT_LIT     shift, and go to state 12
+    STRING_LIT  shift, and go to state 13
+    IDENT       shift, and go to state 27
+    '('         shift, and go to state 15
+
+    $default  reduce using rule 54 (testFinal)
+
+    r_expr       go to state 61
+    testFinal    go to state 22
+    actual_args  go to state 105
+
+
+State 92
+
+   20 method: DEF IDENT . '(' formal_args ')' ':' type statement_block
+   21       | DEF IDENT . '(' formal_args ')' statement_block
+
+    '('  shift, and go to state 106
+
+
+State 93
+
+   17 class_body: '{' statements methods '}' .
+
+    $default  reduce using rule 17 (class_body)
+
+
+State 94
+
+   19 methods: method methods .
+
+    $default  reduce using rule 19 (methods)
+
+
+State 95
+
+   10 type: INTEGER .
+
+    $default  reduce using rule 10 (type)
+
+
+State 96
+
+   11 type: STRING .
+
+    $default  reduce using rule 11 (type)
+
+
+State 97
+
+   13 parameter: IDENT ':' type .
+
+    $default  reduce using rule 13 (parameter)
+
+
+State 98
+
+   16 formal_args: parameter ',' formal_args .
+
+    $default  reduce using rule 16 (formal_args)
+
+
+State 99
+
+    8 class_signature: CLASS IDENT '(' formal_args ')' EXTENDS . IDENT
+
+    IDENT  shift, and go to state 107
+
+
+State 100
+
+   33 statement: WHILE '(' r_expr ')' statement_block .
+
+    $default  reduce using rule 33 (statement)
+
+
+State 101
+
+   63 actual_args: r_expr ',' actual_args .
+
+    $default  reduce using rule 63 (actual_args)
+
+
+State 102
+
+   26 elseif_block: elseif_header statement_block else_clause .
+
+    $default  reduce using rule 26 (elseif_block)
+
+
+State 103
+
+   27 elseif_block: elseif_header statement_block elseif_block .
+
+    $default  reduce using rule 27 (elseif_block)
+
+
+State 104
+
+   36 statement: l_expr ':' IDENT '=' r_expr . ';'
+   51 r_expr: r_expr . boolean_operator r_expr
+   52       | r_expr . arithmetic_operator r_expr
+   56 testFinal: r_expr . dotMatcher
+
+    DOT     shift, and go to state 58
+    EQ      shift, and go to state 39
+    GEQ     shift, and go to state 40
+    LEQ     shift, and go to state 41
+    GT      shift, and go to state 42
+    LT      shift, and go to state 43
+    AND     shift, and go to state 44
+    OR      shift, and go to state 45
+    PLUS    shift, and go to state 46
+    MINUS   shift, and go to state 47
+    MULT    shift, and go to state 48
+    DIVIDE  shift, and go to state 49
+    ';'     shift, and go to state 108
+
+    boolean_operator     go to state 51
+    arithmetic_operator  go to state 52
+    dotMatcher           go to state 53
+
+
+State 105
+
+   61 dotMatcher: DOT IDENT '(' actual_args . ')'
+
+    ')'  shift, and go to state 109
+
+
+State 106
+
+   20 method: DEF IDENT '(' . formal_args ')' ':' type statement_block
+   21       | DEF IDENT '(' . formal_args ')' statement_block
+
+    IDENT  shift, and go to state 55
+
+    $default  reduce using rule 14 (formal_args)
+
+    parameter    go to state 56
+    formal_args  go to state 110
+
+
+State 107
+
+    8 class_signature: CLASS IDENT '(' formal_args ')' EXTENDS IDENT .
+
+    $default  reduce using rule 8 (class_signature)
+
+
+State 108
+
+   36 statement: l_expr ':' IDENT '=' r_expr ';' .
+
+    $default  reduce using rule 36 (statement)
+
+
+State 109
+
+   61 dotMatcher: DOT IDENT '(' actual_args ')' .
+
+    $default  reduce using rule 61 (dotMatcher)
+
+
+State 110
+
+   20 method: DEF IDENT '(' formal_args . ')' ':' type statement_block
+   21       | DEF IDENT '(' formal_args . ')' statement_block
+
+    ')'  shift, and go to state 111
+
+
+State 111
+
+   20 method: DEF IDENT '(' formal_args ')' . ':' type statement_block
+   21       | DEF IDENT '(' formal_args ')' . statement_block
+
+    ':'  shift, and go to state 112
+    '{'  shift, and go to state 33
+
+    statement_block  go to state 113
+
+
+State 112
+
+   20 method: DEF IDENT '(' formal_args ')' ':' . type statement_block
+
+    INTEGER  shift, and go to state 95
+    STRING   shift, and go to state 96
+
+    $default  reduce using rule 12 (type)
+
+    type  go to state 114
+
+
+State 113
+
+   21 method: DEF IDENT '(' formal_args ')' statement_block .
+
+    $default  reduce using rule 21 (method)
+
+
+State 114
+
+   20 method: DEF IDENT '(' formal_args ')' ':' type . statement_block
+
+    '{'  shift, and go to state 33
+
+    statement_block  go to state 115
+
+
+State 115
+
+   20 method: DEF IDENT '(' formal_args ')' ':' type statement_block .
+
+    $default  reduce using rule 20 (method)
