@@ -4,7 +4,12 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <map>
+#include <vector>
 #define MAX_OPERANDS 250
+using namespace std;
+
+
 
 typedef enum node_type_tag 
 {
@@ -40,6 +45,8 @@ typedef enum node_type_tag
 } node_type;
 
 char* whichEnum(node_type_tag e);
+void createMapping(char* subclass, char* superclass);
+void printMap();
 
 typedef enum identifier_type_tag
 {
@@ -75,4 +82,14 @@ struct tree_node
     struct tree_node** operands;
 };
 
+struct classInfo{
+    char* className;
+    char* superClassName;
+    struct tree_node* ptrToSuperclass;
+};
+
+void printTree(struct tree_node* node);
+extern vector<classInfo*> mappings;
 struct tree_node* newTreeNode();
+bool checkWellFormedness();
+bool constructorWrapper(struct tree_node* root);

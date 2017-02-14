@@ -89,12 +89,17 @@ class_signature:
 		 												$$->numOperands = 1;
 		 												
 		 												$$->operands[0] = $4;
+
+
+		 												createMapping((char*) $2, (char*) $7);
 		 												} ;
 		| CLASS IDENT '(' formal_args ')' { $$ = newTreeNode(); cout << "d" << endl;
 											$$->type = TN_CLASSDEF;
 											$$->sval = ($2);
 											$$->numOperands = 1;
-											$$->operands[0] = $4;} ;
+											$$->operands[0] = $4;
+
+											createMapping((char*) $2, (char*)"Obj");} ;
 /*
 type: INTEGER { $$ = INTEGER_LITERAL;}
 	| STRING {$$ = STRING_LITERAL;}
@@ -352,8 +357,8 @@ r_expr:  r_expr boolean_operator{$$ = newTreeNode(); cout << "H" << endl;
 					}
 		;
 
-testFinal: /*Empty*/  {;}
-	| IDENT {$$ = newTreeNode(); cout << "K" << endl;
+testFinal: /*Empty  {;}
+	|*/ IDENT {$$ = newTreeNode(); cout << "K" << endl;
 			$$->type = TN_IDENT_EXPRESSION;
 			$$->sval = ($1);}
 	| r_expr dotMatcher {$$ = newTreeNode(); cout << "L" << endl;
@@ -388,8 +393,10 @@ dotMatcher: DOT IDENT '(' actual_args ')' {$$ = newTreeNode(); cout << "P" << en
 
 
 actual_args:
-		 /*No arguments {;}
-		|*/ r_expr ',' actual_args {$$ = $3;
+		 /*No arguments*/ {$$ = newTreeNode();
+							$$->type;
+							}
+		| r_expr ',' actual_args {$$ = $3;
 									$$->operands[$$->numOperands++] = $1;}
 		| r_expr {$$ = newTreeNode(); cout << "R" << endl;
 				  $$->type = TN_ARGLIST;
@@ -401,35 +408,7 @@ actual_args:
 
 %%
 int counter = 0;
-void printTree(struct tree_node* node)
-{
-	cout << counter++ << endl;
-	if (!node)
-	{
-		cout << "null value, returning..." << endl;
-		return;
-	}
-	else
-	{
-		cout << "node not null" << endl;
-		if(node->type){
-			cout << "node type: " << whichEnum(node->type) << endl;
-		}
-		if(node->sval)
-		{
-			cout << "string value: " << node->sval << endl;
-		}
-		cout << "printing children" << endl;
-		if(node->numOperands > 0)
-		{
-			for(int i = 0; i < node->numOperands; i++)
-			{
-				cout << "num ops: " << node->numOperands << endl;
-				printTree(node->operands[i]);
-			}
-		}
-	}
-}
+
 
 int main(int argc, char** argv) {
 	// open a file handle to a particular file:
@@ -453,7 +432,31 @@ int main(int argc, char** argv) {
 		condition = yyparse();
 	} while (!feof(yyin));
 	
+
+	createMapping((char*) "Obj", (char*) "Obj");
+	createMapping((char*) "Integer", (char*) "Obj");
+	createMapping((char*) "String", (char*) "Obj");
+	createMapping((char*) "Nothing", (char*) "Obj");
+
+	//cout << "printing map" << endl;
+	printMap();
+
+	if(checkWellFormedness()){
+		cout << "Tree is well formed!" << endl;
+	}
+	else{
+		cout << "Tree is NOT well formed!" << endl;
+	}
+
 	printTree(treeRoot);
+
+	if(constructorWrapper(treeRoot))
+	{
+		cout << "Constructors look good" << endl;
+	}
+	else{
+		cout << "Constructors look not so good..." << endl;
+	}
 	
 }
 
