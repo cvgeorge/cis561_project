@@ -23,7 +23,6 @@ int condition = 0;
 	int ival;
 	char* sval;
 	bool bval;
-	char sym;
   	struct tree_node* treeNode; 
 
 }
@@ -41,13 +40,12 @@ int condition = 0;
 %left DOT
 
 
-%left <ival> INT_LIT INTEGER 
-%left <sval> STRING_LIT IDENT STRING
+/*%left <ival> INT_LIT INTEGER */
+%left <sval> STRING_LIT IDENT STRING    INT_LIT INTEGER
 %left <sval> EQ GEQ LEQ GT LT AND OR NOT PLUS MINUS MULT DIVIDE
 
 %type <treeNode> start program class dotMatcher parameter class_declarations class_signature formal_args class_body method statements methods
 %type <treeNode> statement_block statement r_expr l_expr actual_args testFinal if_header if_statement elseif_header elseif_block else_clause boolean_operator arithmetic_operator
-%type <ival> type
 
 %%
 
@@ -67,8 +65,9 @@ class_declarations:
 		;
 
 statements:
-		/*Zero or more statements*/ {;}
-		| statement statements {$1->pNextStatement = $2;
+		/*Zero or more statements*/ {cout << "empty statement" << endl;}
+		| statement statements {cout << "statements" << endl;
+								$1->pNextStatement = $2;
 								$$ = $1;}
 		;
 
@@ -80,40 +79,46 @@ class:
 		 							 $$->operands[2] = $2;} ;
 
 class_signature:
-		 CLASS IDENT '(' formal_args ')' EXTENDS IDENT {$$ = newTreeNode(); cout << "c" << endl;
-		 												$$->type = TN_CLASSDEF; cout << "1" << endl;
-		 												$$->sval = strdup($2); cout << "2" << endl;
-		 												$$->superval = strdup($7); cout << "3" << endl;
-		 												$$->numOperands = 1; cout << "4" << endl;
-		 												$$->operands[0] = $4;cout << "5" << endl;} ;
+		 CLASS IDENT '(' formal_args ')' EXTENDS IDENT {$$ = newTreeNode();
+		 												
+		 												$$->type = TN_CLASSDEF;
+		 												/*$$->sval = ($2); cout << "2" << endl;*/
+		 												
+		 												$$->sval = ($2);
+		 												
+		 												$$->numOperands = 1;
+		 												
+		 												$$->operands[0] = $4;
+		 												} ;
 		| CLASS IDENT '(' formal_args ')' { $$ = newTreeNode(); cout << "d" << endl;
 											$$->type = TN_CLASSDEF;
-											$$->sval = strdup($2);
-											char obj[] = "Obj";
-											$$->superval = obj;
+											$$->sval = ($2);
 											$$->numOperands = 1;
 											$$->operands[0] = $4;} ;
-
+/*
 type: INTEGER { $$ = INTEGER_LITERAL;}
 	| STRING {$$ = STRING_LITERAL;}
 	| {$$ = NONE_TYPE;}
 	;
-
-parameter: IDENT ':' type {	$$ = newTreeNode(); cout << "e" << endl;
+*/
+parameter: IDENT ':' IDENT {	$$ = newTreeNode(); cout << "e" << endl;
 							$$->type = TN_PARAMETER;
-							$$->sval = strdup($1);
-							$$->ival = $3;}
+							$$->sval = ($1);
+
+							$$->dataType = ($3);
+							/*$$->ival = $3;*/}
 							;
 
 formal_args:
-		/*empty*/ {;}
+		/*empty*/ {cout << "fa" << endl;}
 		| parameter {   
 						$$ = newTreeNode(); cout << "f" << endl;
 						$$->type = TN_PARAMLIST;
 						$$->numOperands = 1;
 						$$->operands[0] = $1;
 					} 
-		| parameter ',' formal_args {$$ = $3;
+		| parameter ',' formal_args {cout << "more formal args" << endl;
+									 $$ = $3;
 									 $$->operands[$$->numOperands++] = $1;
 									}
 		;
@@ -127,24 +132,27 @@ class_body:
 		 							 } ;
 
 methods:
-		/*Zero or more methods*/ {;}
-		| method methods {$1->pNextStatement = $2;
+		/*Zero or more methods*/ {cout << "empty methods";}
+		| method methods {cout << "method" << endl;
+							$1->pNextStatement = $2;
 						  $$ = $1;}
 		;
 
 method:
-		  DEF IDENT '(' formal_args ')' ':' type statement_block {$$ = newTreeNode(); cout << "h" << endl;
+		  DEF IDENT '(' formal_args ')' ':' IDENT statement_block {$$ = newTreeNode(); cout << "h" << endl;
 		  															$$->type = TN_METHOD;
-		  															$$->sval = strdup($2);
+		  															$$->sval = ($2);
+		  															$$->dataType = $7;
 		  															$$->numOperands = 2;
-		  															$$->ival = $7;
+		  															/*$$->ival = $7;*/
 		  															$$->operands[0] = $4;
 		  															$$->operands[1] = $8;}
 		| DEF IDENT '(' formal_args ')' statement_block {$$ = newTreeNode(); cout << "i" << endl;
 														$$->type = TN_METHOD;
-														$$->sval = strdup($2);
+														$$->sval = ($2);
+														$$->dataType = (char *) "void";
 														$$->numOperands = 2;
-														$$->ival = NONE_TYPE;
+														/*$$->ival = NONE_TYPE;*/
 														$$->operands[0] = $4;
 														$$->operands[1] = $6;}
 		;
@@ -222,6 +230,7 @@ statement: if_statement {$$ = $1;}
 								 $$->numOperands = 2;
 								 $$->operands[0] = $1;
 								 $$->operands[1] = $3;
+								 cout << "bnm" << endl;
 								 }
 
 		| l_expr ':' IDENT '=' r_expr ';' {
@@ -247,7 +256,9 @@ elseif:
 
 l_expr:	IDENT { $$ = newTreeNode(); cout << "u" << endl;
 				$$->type = TN_LEFT_EXPRESSION;
-				$$->sval = strdup($1);}
+
+				$$->sval = ($1);
+				}
 		| r_expr DOT IDENT {$$ = newTreeNode(); cout << "v" << endl;
 							$$->type = TN_LEFT_EXPRESSION;
 							$$->numOperands = 1;
@@ -256,43 +267,43 @@ l_expr:	IDENT { $$ = newTreeNode(); cout << "u" << endl;
 
 boolean_operator: OR r_expr {$$ = newTreeNode(); cout << "w" << endl;
 							 $$->type = TN_BOOLEAN_EXPRESSION;
-							 $$->sval = strdup($1);
+							 $$->sval = ($1);
 							 $$->numOperands = 1;
 							 $$->operands[0] = $2;}
 
 				| AND r_expr {$$ = newTreeNode(); cout << "x" << endl;
 							 $$->type = TN_BOOLEAN_EXPRESSION;
-							 $$->sval = strdup($1);
+							 $$->sval = ($1);
 							 $$->numOperands = 1;
 							 $$->operands[0] = $2;}
 
 				| EQ r_expr {$$ = newTreeNode(); cout << "y" << endl;
 							 $$->type = TN_BOOLEAN_EXPRESSION;
-							 $$->sval = strdup($1);
+							 $$->sval = ($1);
 							 $$->numOperands = 1;
 							 $$->operands[0] = $2;}
 
 				| GEQ r_expr {$$ = newTreeNode(); cout << "z" << endl;
 							 $$->type = TN_BOOLEAN_EXPRESSION;
-							 $$->sval = strdup($1);
+							 $$->sval = ($1);
 							 $$->numOperands = 1;
 							 $$->operands[0] = $2;}
 
 				| LEQ r_expr {$$ = newTreeNode(); cout << "A" << endl;
 							 $$->type = TN_BOOLEAN_EXPRESSION;
-							 $$->sval = strdup($1);
+							 $$->sval = ($1);
 							 $$->numOperands = 1;
 							 $$->operands[0] = $2;}
 
 				| GT r_expr {$$ = newTreeNode(); cout << "B" << endl;
 							 $$->type = TN_BOOLEAN_EXPRESSION;
-							 $$->sval = strdup($1);
+							 $$->sval = ($1);
 							 $$->numOperands = 1;
 							 $$->operands[0] = $2;}
 
 				| LT r_expr {$$ = newTreeNode(); cout << "C" << endl;
 							 $$->type = TN_BOOLEAN_EXPRESSION;
-							 $$->sval = strdup($1);
+							 $$->sval = ($1);
 							 $$->numOperands = 1;
 							 $$->operands[0] = $2;}
 				;
@@ -300,22 +311,22 @@ boolean_operator: OR r_expr {$$ = newTreeNode(); cout << "w" << endl;
 
 arithmetic_operator:  PLUS r_expr {  $$ = newTreeNode(); cout << "D" << endl;
 									 $$->type = TN_ARITHMETIC_EXPRESSION;
-									 $$->sval = strdup($1);
+									 $$->sval = ($1);
 									 $$->numOperands = 1;
 									 $$->operands[0] = $2;}
 					| MINUS r_expr {$$ = newTreeNode(); cout << "E" << endl;
 									 $$->type = TN_ARITHMETIC_EXPRESSION;
-									 $$->sval = strdup($1);
+									 $$->sval = ($1);
 									 $$->numOperands = 1;
 									 $$->operands[0] = $2;}
 					| MULT r_expr {$$ = newTreeNode(); cout << "F" << endl;
 									 $$->type = TN_ARITHMETIC_EXPRESSION;
-									 $$->sval = strdup($1);
+									 $$->sval = ($1);
 									 $$->numOperands = 1;
 									 $$->operands[0] = $2;}
 					| DIVIDE r_expr {$$ = newTreeNode(); cout << "G" << endl;
 									 $$->type = TN_ARITHMETIC_EXPRESSION;
-									 $$->sval = strdup($1);
+									 $$->sval = ($1);
 									 $$->numOperands = 1;
 									 $$->operands[0] = $2;}
 					; 
@@ -343,7 +354,7 @@ r_expr:  r_expr boolean_operator{$$ = newTreeNode(); cout << "H" << endl;
 testFinal: /*Empty*/  {;}
 	| IDENT {$$ = newTreeNode(); cout << "K" << endl;
 			$$->type = TN_IDENT_EXPRESSION;
-			$$->sval = strdup($1);}
+			$$->sval = ($1);}
 	| r_expr dotMatcher {$$ = newTreeNode(); cout << "L" << endl;
 						$$->type = TN_DEREF;
 						$$->numOperands = 2;
@@ -351,26 +362,26 @@ testFinal: /*Empty*/  {;}
 						$$->operands[1] = $2;}
 	| IDENT '(' actual_args ')' {$$ = newTreeNode(); cout << "M" << endl;
 								$$->type = TN_FUNCTION_CALL_EXPRESSION;
-								$$->sval = strdup($1);
+								$$->sval = ($1);
 								$$->numOperands = 1;
 								$$->operands[0] = $3;}
 	| STRING_LIT {$$ = newTreeNode(); cout << "N" << endl;
 			$$->type = TN_STRING_EXPRESSION;
-			$$->sval = strdup($1);}
+			$$->sval = ($1);}
 	| INT_LIT {$$ = newTreeNode(); cout << "O" << endl;
 			$$->type = TN_INTEGER_EXPRESSION;
-			$$->ival = $1;}
+			/*$$->ival = $1;*/}
 	| '(' r_expr ')' {$$ = $2;}
 	;
 
 dotMatcher: DOT IDENT '(' actual_args ')' {$$ = newTreeNode(); cout << "P" << endl;
 										   $$->type = TN_DEREFERENCE_FUNC;
-										   $$->sval = strdup($2);
+										   $$->sval = ($2);
 										   $$->numOperands = 1;
 										   $$->operands[0] = $4;}
 		|	DOT IDENT {$$ = newTreeNode(); cout << "Q" << endl;
 					   $$->type = TN_DEREFERENCE_VAR;
-					   $$->sval = strdup($2);
+					   $$->sval = ($2);
 					   }
 
 

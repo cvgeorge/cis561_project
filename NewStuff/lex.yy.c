@@ -1010,58 +1010,58 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 62 "scanner.l"
+#line 61 "scanner.l"
 { return IDENT;   }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 67 "scanner.l"
+#line 66 "scanner.l"
 {  return INT_LIT;   }
 	YY_BREAK
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 72 "scanner.l"
+#line 71 "scanner.l"
 { lineNumber++; }
 	YY_BREAK
 
 case 36:
 YY_RULE_SETUP
-#line 75 "scanner.l"
+#line 74 "scanner.l"
 BEGIN(MULTILINECOMMENT); 
 	YY_BREAK
 
 
 case 37:
 YY_RULE_SETUP
-#line 79 "scanner.l"
+#line 78 "scanner.l"
 BEGIN(INITIAL);
 	YY_BREAK
 case 38:
 /* rule 38 can match eol */
 YY_RULE_SETUP
-#line 80 "scanner.l"
+#line 79 "scanner.l"
 { lineNumber++; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 81 "scanner.l"
+#line 80 "scanner.l"
 {;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 82 "scanner.l"
+#line 81 "scanner.l"
 {;}
 	YY_BREAK
 
 case 41:
 YY_RULE_SETUP
-#line 85 "scanner.l"
+#line 84 "scanner.l"
 { commentStringPtr = commentString; BEGIN(TRIPLEQUOTESTRINGS); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 88 "scanner.l"
+#line 87 "scanner.l"
 {  return STRING_LIT; }
 	YY_BREAK
 case 43:
@@ -1069,44 +1069,44 @@ case 43:
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 89 "scanner.l"
+#line 88 "scanner.l"
 {  cerr << "Error tokenizing on line: " << lineNumber << " Unclosed string encountered near \"" << yytext << "\"" << endl;}
 	YY_BREAK
 
 case 44:
 YY_RULE_SETUP
-#line 100 "scanner.l"
+#line 99 "scanner.l"
 { BEGIN(INITIAL);  return STRING_LIT;  }
 	YY_BREAK
 case 45:
 /* rule 45 can match eol */
 YY_RULE_SETUP
-#line 101 "scanner.l"
+#line 100 "scanner.l"
 { *commentStringPtr++ = '\n'; lineNumber++; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 102 "scanner.l"
+#line 101 "scanner.l"
 { *commentStringPtr++ = '\t'; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 103 "scanner.l"
+#line 102 "scanner.l"
 { *commentStringPtr++ = '\r'; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 104 "scanner.l"
+#line 103 "scanner.l"
 { *commentStringPtr++ = '\b'; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 105 "scanner.l"
+#line 104 "scanner.l"
 { *commentStringPtr++ = '\f'; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 108 "scanner.l"
+#line 107 "scanner.l"
 { char* myChar = yytext;
 				 while( *myChar)
 				 	*commentStringPtr++ = *myChar++;
@@ -1116,7 +1116,7 @@ YY_RULE_SETUP
 
 case 51:
 YY_RULE_SETUP
-#line 117 "scanner.l"
+#line 116 "scanner.l"
 ECHO;
 	YY_BREAK
 #line 1123 "lex.yy.c"
@@ -2120,7 +2120,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 117 "scanner.l"
+#line 116 "scanner.l"
 
 
 /*

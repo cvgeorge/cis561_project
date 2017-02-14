@@ -61,14 +61,13 @@ struct tree_node
 	// Number of operands used in this node
 	int numOperands;
 
-	// Integer value of this tree node, if needed
-	int ival;
 
 	// String value of this tree node, if needed
 	char* sval;
+    char* dataType;
 
 	// String value of superclass, if needed
-	char* superval;
+	/*char* superval;*/
 
 	// Operand pointers
     struct tree_node** operands;

@@ -54,11 +54,11 @@ extern int yydebug;
     WHILE = 264,
     RETURN = 265,
     DOT = 266,
-    INT_LIT = 267,
-    INTEGER = 268,
-    STRING_LIT = 269,
-    IDENT = 270,
-    STRING = 271,
+    STRING_LIT = 267,
+    IDENT = 268,
+    STRING = 269,
+    INT_LIT = 270,
+    INTEGER = 271,
     EQ = 272,
     GEQ = 273,
     LEQ = 274,
@@ -84,11 +84,10 @@ union YYSTYPE
 	int ival;
 	char* sval;
 	bool bval;
-	char sym;
   	struct tree_node* treeNode; 
 
 
-#line 92 "parser.tab.h" /* yacc.c:1909  */
+#line 91 "parser.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
