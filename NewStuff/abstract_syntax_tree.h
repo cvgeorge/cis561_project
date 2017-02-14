@@ -37,7 +37,8 @@ typedef enum node_type_tag
     TN_INTEGER_EXPRESSION = 21,
     TN_DEREFERENCE_FUNC = 22,
     TN_DEREFERENCE_VAR = 23,
-    TN_ARGLIST = 24
+    TN_ARGLIST = 24,
+    TN_BOOLEAN_NOT = 25
 
 
 

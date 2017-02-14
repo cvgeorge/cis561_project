@@ -115,10 +115,10 @@ bool checkAllConstructors(struct tree_node* root)
 
 	if(root->type == TN_FUNCTION_CALL_EXPRESSION)
 	{
-		cout << "Found a constructor..." << endl;
+		
 		for(int i = 0; i < mappings.size(); i++)
 		{
-			cout << "Checking all mappings...  Current mapping is:   SUB: " << mappings[i]->className << endl;
+			
 			if(strcmp(mappings[i]->className, root->sval) == 0){
 				return true;
 			}
@@ -141,12 +141,12 @@ bool constructorWrapper(struct tree_node* root)
 {
 	if(root->type == TN_PROGRAM)
 	{
-		cout << "Checking statements..." << endl;
+		
 		return checkAllConstructors(root->operands[1]);
 	}
 	else
 	{
-		cout << "This only works on root nodes" << endl;
+		
 		return false;
 	}
 }
@@ -156,28 +156,28 @@ void printTree(struct tree_node* node)
 {
 	if (!node)
 	{
-		cout << "null value, returning..." << endl;
+		
 		return;
 	}
 	else
 	{
-		cout << "node not null" << endl;
+		
 		if(node->type){
-			cout << "abc" << endl;
 			
-			cout << "node type: " << whichEnum(node->type) << endl;
+			
+			
 		}
-		cout << "asdf" << endl;
+		
 		if(node->sval)
 		{
-			cout << "string value: " << node->sval << endl;
+			
 		}
-		cout << "printing children" << endl;
+		
 		if(node->numOperands > 0)
 		{
 			for(int i = 0; i < node->numOperands; i++)
 			{
-				cout << "num ops: " << node->numOperands << endl;
+				
 				printTree(node->operands[i]);
 			}
 		}
