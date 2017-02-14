@@ -1,6 +1,7 @@
 %{
 #include <iostream>
 using namespace std;
+
 #define YY_DECL extern "C" int yylex()
 #include "parser.tab.h"
 
@@ -8,6 +9,7 @@ using namespace std;
 int lineNumber = 1;
 char commentString[MAX_STRING_LENGTH];
 char* commentStringPtr;
+struct tree_node* treeRoot;
 
 %}
 
@@ -58,12 +60,12 @@ char* commentStringPtr;
 ":"                {  return yytext[0];   }
 
 
-[a-zA-Z_][a-zA-Z0-9_]*     { return IDENT;   }
+[a-zA-Z_][a-zA-Z0-9_]*     { yylval.sval = strdup(yytext); return IDENT;   }
 
 
 
 
-[0-9]+      {  return INT_LIT;   }
+[0-9]+      {  yylval.sval = strdup(yytext);return INT_LIT;   }
 
 
 
@@ -84,7 +86,7 @@ char* commentStringPtr;
 ["]["]["]		{ commentStringPtr = commentString; BEGIN(TRIPLEQUOTESTRINGS); }
 
 
-["](\\[0btnrf"\\]|[^"\n])*["]	{  return STRING_LIT; }
+["](\\[0btnrf"\\]|[^"\n])*["]	{  yylval.sval = strdup(yytext);return STRING_LIT; }
 \"[^\"\n]*$  {  cerr << "Error tokenizing on line: " << lineNumber << " Unclosed string encountered near \"" << yytext << "\"" << endl;}
 
 

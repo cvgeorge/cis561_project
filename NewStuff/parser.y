@@ -13,7 +13,7 @@ extern "C" int yyparse();
 extern "C" FILE *yyin;
 extern int lineNumber;
 extern int yyparse();
-
+extern struct tree_node* treeRoot;
 
 void yyerror(const char *s);
 int condition = 0;
@@ -49,13 +49,13 @@ int condition = 0;
 
 %%
 
-start: program {cout << "Finished parse with no errors" << endl;};
+start: program {treeRoot = $1; if(treeRoot == NULL){cout << "bad things" << endl;} cout << "Finished parse with no errors" << endl;};
 
 program: class_declarations statements {$$ = newTreeNode(); cout << "a" << endl;
 										$$->type = TN_PROGRAM;
 										$$->numOperands = 2;
 										$$->operands[0] = $1;
-										$$->operands[0] = $2;} ;
+										$$->operands[1] = $2;} ;
 		 /*class statement*/ 
 
 class_declarations:
@@ -75,15 +75,15 @@ class:
 		 class_signature class_body {$$ = newTreeNode(); cout << "b" << endl;
 		 							 $$->type = TN_CLASS;
 		 							 $$->numOperands = 2;
-		 							 $$->operands[1] = $1;
-		 							 $$->operands[2] = $2;} ;
+		 							 $$->operands[0] = $1;
+		 							 $$->operands[1] = $2;} ;
 
 class_signature:
 		 CLASS IDENT '(' formal_args ')' EXTENDS IDENT {$$ = newTreeNode();
 		 												
 		 												$$->type = TN_CLASSDEF;
 		 												/*$$->sval = ($2); cout << "2" << endl;*/
-		 												
+		 												//cout << $2 << endl;
 		 												$$->sval = ($2);
 		 												
 		 												$$->numOperands = 1;
@@ -110,7 +110,8 @@ parameter: IDENT ':' IDENT {	$$ = newTreeNode(); cout << "e" << endl;
 							;
 
 formal_args:
-		/*empty*/ {cout << "fa" << endl;}
+		/*empty*/ {$$ = newTreeNode();
+					$$->type = TN_PARAMLIST;cout << "fa" << endl;}
 		| parameter {   
 						$$ = newTreeNode(); cout << "f" << endl;
 						$$->type = TN_PARAMLIST;
@@ -370,6 +371,7 @@ testFinal: /*Empty*/  {;}
 			$$->sval = ($1);}
 	| INT_LIT {$$ = newTreeNode(); cout << "O" << endl;
 			$$->type = TN_INTEGER_EXPRESSION;
+			$$->sval = $1;
 			/*$$->ival = $1;*/}
 	| '(' r_expr ')' {$$ = $2;}
 	;
@@ -398,6 +400,36 @@ actual_args:
 
 
 %%
+int counter = 0;
+void printTree(struct tree_node* node)
+{
+	cout << counter++ << endl;
+	if (!node)
+	{
+		cout << "null value, returning..." << endl;
+		return;
+	}
+	else
+	{
+		cout << "node not null" << endl;
+		if(node->type){
+			cout << "node type: " << whichEnum(node->type) << endl;
+		}
+		if(node->sval)
+		{
+			cout << "string value: " << node->sval << endl;
+		}
+		cout << "printing children" << endl;
+		if(node->numOperands > 0)
+		{
+			for(int i = 0; i < node->numOperands; i++)
+			{
+				cout << "num ops: " << node->numOperands << endl;
+				printTree(node->operands[i]);
+			}
+		}
+	}
+}
 
 int main(int argc, char** argv) {
 	// open a file handle to a particular file:
@@ -420,6 +452,8 @@ int main(int argc, char** argv) {
 	do {
 		condition = yyparse();
 	} while (!feof(yyin));
+	
+	printTree(treeRoot);
 	
 }
 
